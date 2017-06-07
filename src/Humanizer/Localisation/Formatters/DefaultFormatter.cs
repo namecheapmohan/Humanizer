@@ -29,6 +29,15 @@ namespace Humanizer.Localisation.Formatters
         }
 
         /// <summary>
+        /// Never
+        /// </summary>
+        /// <returns>Returns Never</returns>
+        public virtual string DateHumanize_Never()
+        {
+            return Format(ResourceKeys.DateHumanize.Never);
+        }
+
+        /// <summary>
         /// Returns the string representation of the provided DateTime
         /// </summary>
         /// <param name="timeUnit"></param>
@@ -52,49 +61,58 @@ namespace Humanizer.Localisation.Formatters
         /// <summary>
         /// Returns the string representation of the provided TimeSpan
         /// </summary>
-        /// <param name="timeUnit">Must be less than or equal to TimeUnit.Week</param>
+        /// <param name="timeUnit">A time unit to represent.</param>
         /// <param name="unit"></param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentOutOfRangeException">Is thrown when timeUnit is larger than TimeUnit.Week</exception>
         public virtual string TimeSpanHumanize(TimeUnit timeUnit, int unit)
         {
-            if (timeUnit > TimeUnit.Week)
-                throw new ArgumentOutOfRangeException("timeUnit", "There's no meaningful way to humanize passed timeUnit.");
-
             return GetResourceForTimeSpan(timeUnit, unit);
         }
 
         private string GetResourceForDate(TimeUnit unit, Tense timeUnitTense, int count)
         {
-            string resourceKey = ResourceKeys.DateHumanize.GetResourceKey(unit, timeUnitTense: timeUnitTense, count: count);
+            var resourceKey = ResourceKeys.DateHumanize.GetResourceKey(unit, timeUnitTense: timeUnitTense, count: count);
             return count == 1 ? Format(resourceKey) : Format(resourceKey, count);
         }
 
         private string GetResourceForTimeSpan(TimeUnit unit, int count)
         {
-            string resourceKey = ResourceKeys.TimeSpanHumanize.GetResourceKey(unit, count);
+            var resourceKey = ResourceKeys.TimeSpanHumanize.GetResourceKey(unit, count);
             return count == 1 ? Format(resourceKey) : Format(resourceKey, count);
         }
 
         /// <summary>
-        /// 
+        /// Formats the specified resource key.
         /// </summary>
-        /// <param name="resourceKey"></param>
+        /// <param name="resourceKey">The resource key.</param>
         /// <returns></returns>
+        /// <exception cref="ArgumentException">If the resource not exists on the specified culture.</exception>
         protected virtual string Format(string resourceKey)
         {
-            return Resources.GetResource(GetResourceKey(resourceKey), _culture);
+            var resourceString = Resources.GetResource(GetResourceKey(resourceKey), _culture);
+
+            if (string.IsNullOrEmpty(resourceString))
+                throw new ArgumentException($"The resource object with key '{resourceKey}' was not found", nameof(resourceKey));
+
+            return resourceString;
         }
 
         /// <summary>
-        /// 
+        /// Formats the specified resource key.
         /// </summary>
-        /// <param name="resourceKey"></param>
-        /// <param name="number"></param>
+        /// <param name="resourceKey">The resource key.</param>
+        /// <param name="number">The number.</param>
         /// <returns></returns>
+        /// <exception cref="ArgumentException">If the resource not exists on the specified culture.</exception>
         protected virtual string Format(string resourceKey, int number)
         {
-            return Resources.GetResource(GetResourceKey(resourceKey, number), _culture).FormatWith(number);
+            var resourceString = Resources.GetResource(GetResourceKey(resourceKey, number), _culture);
+
+            if (string.IsNullOrEmpty(resourceString))
+                throw new ArgumentException($"The resource object with key '{resourceKey}' was not found", nameof(resourceKey));
+
+            return resourceString.FormatWith(number);
         }
 
         /// <summary>

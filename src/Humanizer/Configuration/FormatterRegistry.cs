@@ -11,13 +11,15 @@ namespace Humanizer.Configuration
             Register("ro", new RomanianFormatter());
             Register("ru", new RussianFormatter());
             Register("sl", new SlovenianFormatter());
+            Register("hr", new CroatianFormatter());
             Register("sr", new SerbianFormatter("sr"));
             Register("sr-Latn", new SerbianFormatter("sr-Latn"));
+            Register("uk", new UkrainianFormatter());
             RegisterCzechSlovakPolishFormatter("cs");
             RegisterCzechSlovakPolishFormatter("pl");
             RegisterCzechSlovakPolishFormatter("sk");
             RegisterDefaultFormatter("bg");
-            RegisterDefaultFormatter("pt-BR");
+            RegisterDefaultFormatter("pt");
             RegisterDefaultFormatter("sv");
             RegisterDefaultFormatter("tr");
             RegisterDefaultFormatter("vi");
@@ -41,6 +43,9 @@ namespace Humanizer.Configuration
             RegisterDefaultFormatter("it");
             RegisterDefaultFormatter("uz-Latn-UZ");
             RegisterDefaultFormatter("uz-Cyrl-UZ");
+            RegisterDefaultFormatter("zh-CN");
+            RegisterDefaultFormatter("zh-Hans");
+            RegisterDefaultFormatter("zh-Hant");
         }
 
         private void RegisterDefaultFormatter(string localeCode)

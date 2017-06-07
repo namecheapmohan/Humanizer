@@ -22,8 +22,13 @@ namespace Humanizer.Localisation.NumberToWords
             {'a', "ıncı"},
         };
 
-        public override string Convert(int number)
+        public override string Convert(long input)
         {
+            if (input > Int32.MaxValue || input < Int32.MinValue)
+            {
+                throw new NotImplementedException();
+            }
+            var number = (int)input;
             if (number == 0)
                 return UnitsMap[0];
 
@@ -69,7 +74,7 @@ namespace Humanizer.Localisation.NumberToWords
                 parts.Add(UnitsMap[number]);
             }
 
-            string toWords = string.Join(" ", parts.ToArray());
+            var toWords = string.Join(" ", parts.ToArray());
 
             return toWords;
         }
@@ -95,7 +100,7 @@ namespace Humanizer.Localisation.NumberToWords
             if (suffixFoundOnLastVowel)
                 word = word.Substring(0, word.Length - 1);
 
-            return String.Format("{0}{1}", word, wordSuffix);
+            return string.Format("{0}{1}", word, wordSuffix);
         }
     }
 }

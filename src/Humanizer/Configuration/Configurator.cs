@@ -7,6 +7,7 @@ using Humanizer.Localisation.Formatters;
 using Humanizer.Localisation.NumberToWords;
 using Humanizer.Localisation.Ordinalizers;
 using Humanizer.Localisation.CollectionFormatters;
+using Humanizer.Localisation.DateToOrdinalWords;
 
 namespace Humanizer.Configuration
 {
@@ -52,6 +53,15 @@ namespace Humanizer.Configuration
             get { return _ordinalizers; }
         }
 
+        private static readonly LocaliserRegistry<IDateToOrdinalWordConverter> _dateToOrdinalWordConverters = new DateToOrdinalWordsConverterRegistry();
+        /// <summary>
+        /// A registry of ordinalizers used to localise Ordinalize method
+        /// </summary>
+        public static LocaliserRegistry<IDateToOrdinalWordConverter> DateToOrdinalWordsConverters
+        {
+            get { return _dateToOrdinalWordConverters; }
+        }
+
         internal static ICollectionFormatter CollectionFormatter
         {
             get
@@ -89,6 +99,17 @@ namespace Humanizer.Configuration
             }
         }
 
+        /// <summary>
+        /// The ordinalizer to be used
+        /// </summary>
+        internal static IDateToOrdinalWordConverter DateToOrdinalWordsConverter
+        {
+            get
+            {
+                return DateToOrdinalWordsConverters.ResolveForUiCulture();
+            }
+        }
+
         private static IDateTimeHumanizeStrategy _dateTimeHumanizeStrategy = new DefaultDateTimeHumanizeStrategy();
         /// <summary>
         /// The strategy to be used for DateTime.Humanize
@@ -97,6 +118,16 @@ namespace Humanizer.Configuration
         {
             get { return _dateTimeHumanizeStrategy; }
             set { _dateTimeHumanizeStrategy = value; }
+        }
+
+        private static IDateTimeOffsetHumanizeStrategy _dateTimeOffsetHumanizeStrategy = new DefaultDateTimeOffsetHumanizeStrategy();
+        /// <summary>
+        /// The strategy to be used for DateTimeOffset.Humanize
+        /// </summary>
+        public static IDateTimeOffsetHumanizeStrategy DateTimeOffsetHumanizeStrategy
+        {
+            get { return _dateTimeOffsetHumanizeStrategy; }
+            set { _dateTimeOffsetHumanizeStrategy = value; }
         }
 
         private static readonly Func<PropertyInfo, bool> DefaultEnumDescriptionPropertyLocator = p => p.Name == "Description";
